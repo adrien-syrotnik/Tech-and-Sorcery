@@ -1,47 +1,52 @@
+using PDollarGestureRecognizer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.IO;
 
 public class SymbolHandler : MonoBehaviour
 {
 
-    public float tolerance = 0.1f;
+    public float minimumPourcentage = 0.9f;
+
+    [System.Serializable]
+    public class SymbolEvent : UnityEngine.Events.UnityEvent<string> { }
+    public SymbolEvent OnSymbol = new SymbolEvent();
+
     private TrailRenderer trail;
 
 
     public SymbolPath[] symbolPaths;
-    public GameObject[] symbolPrefabs;
 
     // Start is called before the first frame update
     void Start()
     {
         trail = GetComponent<TrailRenderer>();
-        //Get All SymbolPath from SymbolPrefabs tab
-        symbolPaths = new SymbolPath[symbolPrefabs.Length];
-        for (int i = 0; i < symbolPrefabs.Length; i++)
-        {
-            symbolPaths[i] = symbolPrefabs[i].GetComponent<SymbolPrefab>().symbolPath;
-        }
-
         trail.enabled = false;
-
+        string[] gestureFiles = Directory.GetFiles(Application.persistentDataPath, "*.xml");
+        foreach (string gestureFile in gestureFiles)
+        {
+            trainingSet.Add(GestureIO.ReadGestureFromFile(gestureFile));
+        }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    
 
     private SymbolPath playerPath;
 
+    public Action<InputAction.CallbackContext> StartDraw2 { get; private set; }
+
     public void StartDraw()
     {
+        Debug.Log("Start Draw");
         playerPath = new SymbolPath("PlayerPath");
         trail.enabled = true;
     }
+
+    public bool creationMode = true;
+    public string newGestureName;
+
+    private List<Gesture> trainingSet = new List<Gesture>();
 
     public void EndDraw()
     {
@@ -53,90 +58,42 @@ public class SymbolHandler : MonoBehaviour
         // Add the points to the player path
         playerPath.points.AddRange(trailPoints);
 
-        //Remove camera rotation from playerPath to be flat
+        Point[] pointArray = new Point[playerPath.points.Count];
+
         for (int i = 0; i < playerPath.points.Count; i++)
         {
-            playerPath.points[i] = Quaternion.Inverse(Camera.main.transform.rotation) * playerPath.points[i];
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(playerPath.points[i]);
+            pointArray[i] = new Point(screenPoint.x, screenPoint.y, 0);
         }
 
+        Gesture newGesture = new Gesture(pointArray);
 
-
-        // Get the min and max points
-        playerPath.minPoint = playerPath.points[0];
-        playerPath.maxPoint = playerPath.points[0];
-        foreach (Vector3 point in playerPath.points)
+        if(creationMode)
         {
-            if (point.x < playerPath.minPoint.x)
-            {
-                playerPath.minPoint.x = point.x;
-            }
-            if (point.y < playerPath.minPoint.y)
-            {
-                playerPath.minPoint.y = point.y;
-            }
-            if (point.z < playerPath.minPoint.z)
-            {
-                playerPath.minPoint.z = point.z;
-            }
-            if (point.x > playerPath.maxPoint.x)
-            {
-                playerPath.maxPoint.x = point.x;
-            }
-            if (point.y > playerPath.maxPoint.y)
-            {
-                playerPath.maxPoint.y = point.y;
-            }
-            if (point.z > playerPath.maxPoint.z)
-            {
-                playerPath.maxPoint.z = point.z;
-            }
-        }
+            newGesture.Name = newGestureName;
+            trainingSet.Add(newGesture);
 
-        //Rescale playerPath to fit in a 1x1x1 cube
-        Vector3 scale = playerPath.maxPoint - playerPath.minPoint;
-        for (int i = 0; i < playerPath.points.Count; i++)
+            string fileName = Application.persistentDataPath + "/" + newGestureName + ".xml";
+            GestureIO.WriteGesture(pointArray, newGestureName, fileName);
+        }
+        else
         {
-            playerPath.points[i] = new Vector3(
-                (playerPath.points[i].x - playerPath.minPoint.x) / scale.x,
-                (playerPath.points[i].y - playerPath.minPoint.y) / scale.y,
-                (playerPath.points[i].z - playerPath.minPoint.z) / scale.z
-            );
+            Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
+            Debug.Log(result.GestureClass + " " + result.Score);
+            if (result.Score > minimumPourcentage)
+            {
+                OnSymbol.Invoke(result.GestureClass);
+            }
         }
 
-        // Check if the player path is within the tolerance of the symbol
-        foreach (SymbolPath symbolPath in symbolPaths)
-        {
+        
 
-            bool match = false;
-            int symbolPathIndex = 0;
-            Vector3 pointToFind = symbolPath.points[0];
-            
-            for (int i = 0; i < playerPath.points.Count; i++)
-            {
-                if (Vector3.Distance(playerPath.points[i], pointToFind) < tolerance)
-                {
-                    symbolPathIndex++;
-                    if (symbolPathIndex >= symbolPath.points.Count)
-                    {
-                        match = true;
-                        break;
-                    }
-                    pointToFind = symbolPath.points[symbolPathIndex];
-                }
-            }
-            
-            if (match)
-            {
-                Debug.Log("Matched symbol: " + symbolPath.name);
-                break;
-            }
-
-        }
+       
 
         //Draw playerPath on LineRenderer
-        LineRenderer lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = playerPath.points.Count;
-        lineRenderer.SetPositions(playerPath.points.ToArray());
+        //LineRenderer lineRenderer = GetComponent<LineRenderer>();
+        //lineRenderer.positionCount = playerPath.points.Count;
+        //lineRenderer.SetPositions(playerPath.points.ToArray());
 
         trail.Clear();
         trail.enabled = false;
