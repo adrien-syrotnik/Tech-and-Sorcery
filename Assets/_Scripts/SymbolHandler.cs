@@ -78,11 +78,18 @@ public class SymbolHandler : MonoBehaviour
         }
         else
         {
-            Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
-            Debug.Log(result.GestureClass + " " + result.Score);
-            if (result.Score > minimumPourcentage)
+            try
             {
-                OnSymbol.Invoke(result.GestureClass);
+                Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
+                Debug.Log(result.GestureClass + " " + result.Score);
+                if (result.Score > minimumPourcentage)
+                {
+                    OnSymbol.Invoke(result.GestureClass);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
             }
         }
 

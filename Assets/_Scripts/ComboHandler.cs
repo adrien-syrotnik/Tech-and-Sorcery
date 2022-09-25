@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.XR;
+using UnityEngine.Events;
 
 public class ComboHandler : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class ComboHandler : MonoBehaviour
 
     [NonReorderable]
     public Combo[] combos;
+    
 
     public void CheckCombo(string spell)
     {
