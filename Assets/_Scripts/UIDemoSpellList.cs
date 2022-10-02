@@ -36,7 +36,7 @@ public class UIDemoSpellList : MonoBehaviour
 
             //Get button component and add trainViewer function
             Button button = panelSpell.GetComponentInChildren<Button>();
-            button.onClick.AddListener(() => StartCoroutine(trainViewer.ShowCombo(c)));
+            button.onClick.AddListener(() => trainViewer.StartShowCombo(c));
 
             int indexSymbol = 0;
 

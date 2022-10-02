@@ -18,7 +18,11 @@ public class ComboHandler : MonoBehaviour
 
     [NonReorderable]
     public Combo[] combos;
-    
+
+
+    public UnityEvent OnComboTimeout = new UnityEvent();
+
+
 
     public void CheckCombo(string spell)
     {
@@ -69,6 +73,7 @@ public class ComboHandler : MonoBehaviour
         actualCombo.Clear();
         debugText.text = "";
         comboTimeoutText.text = "";
+        OnComboTimeout.Invoke();
     }
 }
 

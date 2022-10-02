@@ -5,15 +5,25 @@ using UnityEngine.XR;
 
 public class SpellLauncher : MonoBehaviour
 {
-
+    [Header("Fireball properties")]
     public GameObject fireballPrefab;
-    public Transform fireballTransform;
 
+    [Header("Firewave properties")]
+    public GameObject firewavePrefab;
+
+    [Header("PlanetBursto properties")]
     public GameObject planetBurstoPrefab;
     public float planetSpeed = 10f;
     public float planetHigh = 80f;
     public float planetFar = 10f;
     public AudioClip planetExplosion;
+
+    [Header("Empalement properties")]
+    public GameObject empalementPrefab;
+    public int numberRocks = 5;
+
+    [Header("Wall properties")]
+    public GameObject wallPrefab;
 
     private AudioSource audioSource;
 
@@ -30,6 +40,38 @@ public class SpellLauncher : MonoBehaviour
         fireball.GetComponent<Rigidbody>().AddForce(transform.forward * 15, ForceMode.Impulse);
     }
 
+    public void Firewave()
+    {
+        GameObject firewave = Instantiate(firewavePrefab, transform.position, transform.rotation);
+    }
+
+    //Spawn 5 rocks in front of the player on the ground
+    public void Empalement()
+    {
+        //Get the player transform (camera)
+        Transform cameraTransform = Camera.main.transform;
+
+        //Get the vector3 position in front of the camera
+        Vector3 position = cameraTransform.position + cameraTransform.forward * 1;
+
+        //Get the vector3 position project on the ground
+        Vector3 positionGround = new Vector3(position.x, 0, position.z);
+
+        //Spawn the rocks and add an Angle to them
+        for (int i = 0; i < numberRocks; i++)
+        {
+            GameObject empalement = Instantiate(empalementPrefab, positionGround, transform.rotation);
+            empalement.GetComponent<Empalement>().angle = new Vector3(0, 0, 360/numberRocks * i);
+        }
+    }
+
+
+    public void Wall()
+    {
+        //Spawn wall in front of the player under the ground
+        GameObject wall = Instantiate(wallPrefab, transform.position + transform.forward * 1, transform.rotation);
+        
+    }
 
     public void PlanetBursto()
     {
