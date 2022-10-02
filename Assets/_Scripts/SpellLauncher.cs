@@ -25,11 +25,33 @@ public class SpellLauncher : MonoBehaviour
     [Header("Wall properties")]
     public GameObject wallPrefab;
 
+    [Header("Lightning properties")]
+    public GameObject lightningPrefab;
+
+
     private AudioSource audioSource;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+    }
+
+    public struct TransformData
+    {
+        public Vector3 position;
+        public Quaternion rotation;
+    }
+
+    private TransformData SpawnTransformCamera(float distance)
+    {
+        TransformData transformData;
+        transformData.position = Camera.main.transform.position + Camera.main.transform.forward * distance;
+        transformData.position.y = 0;
+
+        //Get only y rotation
+        transformData.rotation = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
+
+        return transformData;
     }
 
     public void Fireball()
@@ -42,42 +64,51 @@ public class SpellLauncher : MonoBehaviour
 
     public void Firewave()
     {
-        GameObject firewave = Instantiate(firewavePrefab, transform.position, transform.rotation);
+        TransformData transformData = SpawnTransformCamera(0);
+
+        GameObject firewave = Instantiate(firewavePrefab, transformData.position, transformData.rotation);
     }
 
     //Spawn 5 rocks in front of the player on the ground
     public void Empalement()
     {
-        //Get the player transform (camera)
-        Transform cameraTransform = Camera.main.transform;
-
-        //Get the vector3 position in front of the camera
-        Vector3 position = cameraTransform.position + cameraTransform.forward * 1;
-
-        //Get the vector3 position project on the ground
-        Vector3 positionGround = new Vector3(position.x, 0, position.z);
+        TransformData transformData = SpawnTransformCamera(3);
 
         //Spawn the rocks and add an Angle to them
         for (int i = 0; i < numberRocks; i++)
         {
-            GameObject empalement = Instantiate(empalementPrefab, positionGround, transform.rotation);
-            empalement.GetComponent<Empalement>().angle = new Vector3(0, 0, 360/numberRocks * i);
+            GameObject empalement = Instantiate(empalementPrefab, transformData.position + empalementPrefab.transform.position, transformData.rotation);
+            //Random Angle arround a cirlce pattern distance from center
+
+            //empalement.transform.RotateAround(transformData.position, Vector3.up, 360 / numberRocks * i);
+            
+            
+            empalement.GetComponent<Empalement>().angle = new Vector3(Random.Range(-25, 25), Random.Range(0, 360), Random.Range(-25, 25));
         }
     }
 
 
     public void Wall()
     {
-        //Spawn wall in front of the player under the ground
-        GameObject wall = Instantiate(wallPrefab, transform.position + transform.forward * 1, transform.rotation);
-        
+        TransformData transformData = SpawnTransformCamera(3);
+
+        GameObject wall = Instantiate(wallPrefab, transformData.position + wallPrefab.transform.position, transformData.rotation);
+
+    }
+
+    public void Lightning()
+    {
+        //Spawn lightning in front of the player
+        TransformData transformData = SpawnTransformCamera(4);
+
+        GameObject lightning = Instantiate(lightningPrefab, transformData.position, lightningPrefab.transform.rotation);
     }
 
     public void PlanetBursto()
     {
         //Get the player position in front of him
         Vector3 planetPosition = transform.position + transform.forward * 6;
-        planetPosition.y += planetHigh + planetBurstoPrefab.transform.localScale.y/3.5f;
+        planetPosition.y += planetHigh + planetBurstoPrefab.transform.localScale.y / 3.5f;
         planetPosition.z += (transform.position + transform.forward * planetFar).z;
         planetPosition.x += (transform.position + transform.forward * planetFar).x;
 
@@ -87,7 +118,7 @@ public class SpellLauncher : MonoBehaviour
         //Add the speed and targetPos
         planet.GetComponent<PlanetBursto>().planetSpeed = planetSpeed;
         planet.GetComponent<PlanetBursto>().planetTarget = transform.position + transform.forward * 6 - Vector3.up * planetBurstoPrefab.transform.localScale.y / 4;
-        
+
         StartCoroutine(WaitPlanetCrash(planetHigh / planetSpeed, planet));
     }
 
@@ -108,7 +139,7 @@ public class SpellLauncher : MonoBehaviour
         yield return new WaitForSeconds(time / 4);
 
         //////// SECOND PART ////////
-        
+
         InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).SendHapticImpulse(0, 0.1f, time / 4);
         InputDevices.GetDeviceAtXRNode(XRNode.RightHand).SendHapticImpulse(0, 0.1f, time / 4);
 
@@ -130,11 +161,11 @@ public class SpellLauncher : MonoBehaviour
         InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).SendHapticImpulse(0, 0.5f, time / 4);
         InputDevices.GetDeviceAtXRNode(XRNode.RightHand).SendHapticImpulse(0, 0.5f, time / 4);
 
-        planet.GetComponent<PlanetBursto>().StartFade(time/4);
+        planet.GetComponent<PlanetBursto>().StartFade(time / 4);
 
         //Wait 1/4 to start the crash effect
         yield return new WaitForSeconds(time / 4);
-        
+
         planet.GetComponent<PlanetBursto>().ExplosionForce();
 
         InputDevices.GetDeviceAtXRNode(XRNode.LeftHand).SendHapticImpulse(0, 1f, 0.2f);

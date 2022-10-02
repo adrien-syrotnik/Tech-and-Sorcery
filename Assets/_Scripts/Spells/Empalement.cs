@@ -8,7 +8,7 @@ public class Empalement : MonoBehaviour
     //Angle to rotate the projectile
     public Vector3 angle = new Vector3(0, 0, 0);
     //Speed of the projectile
-    public float speed = 1f;
+    public float speed = 5f;
 
     public float lifeTime = 10f;
 
@@ -30,13 +30,13 @@ public class Empalement : MonoBehaviour
     private void FixedUpdate()
     {
         isSummoned = true;
-        while (yElevated < transform.localScale.y * 2)
+        if (yElevated < transform.localScale.y*2/3)
         {
-            transform.Translate(Vector3.up * speed * Time.deltaTime * 0.1f);
+            transform.Translate(Vector3.up * speed * Time.deltaTime);
             //Negative for rockEffect
-            rockEffect.gameObject.transform.Translate(Vector3.down * speed * Time.deltaTime * 0.1f);
+            rockEffect.gameObject.transform.Translate(Vector3.down * speed * Time.deltaTime);
             isSummoned = false;
-            yElevated += speed * Time.deltaTime * 0.1f;
+            yElevated += speed * Time.deltaTime;
         }
         if(isSummoned)
         {

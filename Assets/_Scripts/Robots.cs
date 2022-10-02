@@ -33,7 +33,7 @@ public class Robots : MonoBehaviour
         }
     }
 
-    public void ActivateRagdoll(Collision collision)
+    public void ActivateRagdoll()
     {
         animator.enabled = false;
         foreach (Rigidbody rb in rigidBodies)

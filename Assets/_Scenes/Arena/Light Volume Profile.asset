@@ -24,7 +24,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 13.557775
+    m_Value: 12.8
   compensation:
     m_OverrideState: 0
     m_Value: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
   active: 1
   indirectDiffuseLightingMultiplier:
     m_OverrideState: 1
-    m_Value: 3.12
+    m_Value: 0.2
   indirectDiffuseLightingLayers:
     m_OverrideState: 0
     m_Value: 255
@@ -200,7 +200,7 @@ MonoBehaviour:
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 13.3
+    m_Value: 13.53
   multiplier:
     m_OverrideState: 0
     m_Value: 1

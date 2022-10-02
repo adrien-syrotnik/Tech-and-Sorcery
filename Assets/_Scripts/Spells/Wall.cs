@@ -26,13 +26,13 @@ public class Wall : MonoBehaviour
     private void FixedUpdate()
     {
         isSummoned = true;
-        while (yElevated < transform.localScale.y * 2)
+        if (yElevated < transform.localScale.y)
         {
-            transform.Translate(Vector3.up * speed * Time.deltaTime * 0.1f);
+            transform.Translate(Vector3.up * speed * Time.deltaTime * 0.5f);
             //Negative for rockEffect
-            rockEffect.gameObject.transform.Translate(Vector3.down * speed * Time.deltaTime * 0.1f);
+            rockEffect.gameObject.transform.Translate(Vector3.down * speed * Time.deltaTime * 0.5f);
             isSummoned = false;
-            yElevated += speed * Time.deltaTime * 0.1f;
+            yElevated += speed * Time.deltaTime * 0.5f;
         }
         if (isSummoned)
         {
