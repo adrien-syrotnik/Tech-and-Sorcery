@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lightning : MonoBehaviour
+public class Lightning : GiveDamage
 {
     public float duration = 0.5f;
     public float impactTime = 0.1f;
@@ -14,6 +14,7 @@ public class Lightning : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        damage = 5;
         StartCoroutine(ExplosionImpact());
     }
 
@@ -29,7 +30,7 @@ public class Lightning : MonoBehaviour
             ActivateParentRagdoll activate = collider.GetComponent<ActivateParentRagdoll>();
             if (activate != null)
             {
-                activate.ActivateRagdoll();
+                activate.GiveDamage(damage);
             }
 
             Rigidbody rb = collider.GetComponent<Rigidbody>();

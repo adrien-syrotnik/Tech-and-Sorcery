@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -7448269961095724556}
   - component: {fileID: 8350295918534271219}
   - component: {fileID: 4419018626046381846}
+  - component: {fileID: -1881935671865061939}
   m_Layer: 0
   m_Name: Fireball
   m_TagString: Untagged
@@ -193,3 +194,16 @@ VisualEffect:
       m_Array: []
     m_Bool:
       m_Array: []
+--- !u!114 &-1881935671865061939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6596895912364886593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71a96cf4e2692aa4aabdef7be9106753, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1

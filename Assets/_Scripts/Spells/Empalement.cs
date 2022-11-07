@@ -30,7 +30,7 @@ public class Empalement : MonoBehaviour
     private void FixedUpdate()
     {
         isSummoned = true;
-        if (yElevated < transform.localScale.y*2/3)
+        if (yElevated < transform.localScale.y*0.5)
         {
             transform.Translate(Vector3.up * speed * Time.deltaTime);
             //Negative for rockEffect

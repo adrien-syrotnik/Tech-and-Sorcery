@@ -12,24 +12,31 @@ public class ActivateParentRagdoll : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    public void ActivateRagdoll()
+    public void GiveDamage(int damage)
     {
         if(rb.isKinematic)
         {
-            rb.isKinematic = false;
             Robots robots = GetComponentInParent<Robots>();
-            robots.ActivateRagdoll();
+            robots.TakeDamage(damage);
         }
         
     }
-
-    private void OnCollisionEnter(Collision collision)
+    
+    public void OnCollisionEnter(Collision collision)
     {
-        ActivateRagdoll();
+        GiveDamage giveDamage = collision.gameObject.GetComponent<GiveDamage>();
+        if (giveDamage != null)
+        {
+            GiveDamage(giveDamage.damage);
+        }
+    }
+    
+    public void OnTriggerEnter(Collider other)
+    {
+        GiveDamage giveDamage = other.gameObject.GetComponent<GiveDamage>();
+        if (giveDamage != null)
+        {
+            GiveDamage(giveDamage.damage);
+        }
     }
 }
