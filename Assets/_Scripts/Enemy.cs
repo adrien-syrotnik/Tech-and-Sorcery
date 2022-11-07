@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public int health = 5;
+    public float health = 5;
+    public float damage = 1;
 
     private GameObject player;
 
@@ -19,7 +20,7 @@ public class Enemy : MonoBehaviour
 
     private bool canAttack = true;
 
-    protected bool isDead = false;
+    public bool isDead = false;
 
     private NavMeshAgent agent;
 
@@ -84,7 +85,7 @@ public class Enemy : MonoBehaviour
         
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         health -= damage;
         if (health <= 0)

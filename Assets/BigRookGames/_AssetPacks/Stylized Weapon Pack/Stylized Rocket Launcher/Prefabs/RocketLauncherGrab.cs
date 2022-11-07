@@ -1,4 +1,3 @@
-using BigRookGames.Weapons;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +28,11 @@ public class RocketLauncherGrab : XRGrabInteractable
             ProcessDoubleGrip();
         }
 
+        if (interactorsSelecting.Count == 2)
+        {
+            canShoot = true;
+        }
+
     }
 
     private void ProcessDoubleGrip()
@@ -38,27 +42,39 @@ public class RocketLauncherGrab : XRGrabInteractable
         Transform firstHand = interactorsSelecting[0].transform;
         Transform secondHand = interactorsSelecting[1].transform;
 
-        //Tp the first hand to the first attach point
-        firstHand.position = firstAttach.position;
-        firstHand.rotation = firstAttach.rotation;
-
-        //Tp the second hand to the second attach point
-        secondHand.position = secondAttach.position;
-        secondHand.rotation = secondAttach.rotation;
-
-        canShoot = true;
+        transform.position = secondAttach.position;
+        transform.rotation = Quaternion.LookRotation(firstHand.position - secondHand.position);
     }
 
     protected override void OnActivated(ActivateEventArgs args)
     {
+        Debug.Log("OnActivated");
         base.OnActivated(args);
-        if (canShoot)
-            Shoot();
+        Debug.Log("Shoot");
+        Shoot();
+
     }
 
     private void Shoot()
     {
         GunfireController gun = GetComponent<GunfireController>();
         gun.FireWeapon();
+    }
+
+    protected override void Drop()
+    {
+        if (!isSelected)
+        {
+            base.Drop();
+        }
+
+    }
+
+    protected override void Grab()
+    {
+        if (interactorsSelecting.Count == 1)
+        {
+            base.Grab();
+        }
     }
 }

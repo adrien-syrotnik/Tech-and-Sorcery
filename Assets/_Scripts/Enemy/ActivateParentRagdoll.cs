@@ -12,7 +12,7 @@ public class ActivateParentRagdoll : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void GiveDamage(int damage)
+    public void GiveDamage(float damage)
     {
         if(rb.isKinematic)
         {

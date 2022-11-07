@@ -28,6 +28,11 @@ public class SpellLauncher : MonoBehaviour
     [Header("Lightning properties")]
     public GameObject lightningPrefab;
 
+    [Header("Tornado properties")]
+    public GameObject tornadoPrefab;
+
+    [Header("WindUp properties")]
+    public GameObject windUpPrefab;
 
     private AudioSource audioSource;
 
@@ -56,9 +61,7 @@ public class SpellLauncher : MonoBehaviour
 
     public void Fireball()
     {
-        GameObject fireball = Instantiate(fireballPrefab, transform.position, transform.rotation);
-
-        //Add force to laucnh the fireball
+        GameObject fireball = Instantiate(fireballPrefab, transform.position, SpawnTransformCamera(0).rotation);
         fireball.GetComponent<Rigidbody>().AddForce(transform.forward * 15, ForceMode.Impulse);
     }
 
@@ -101,7 +104,23 @@ public class SpellLauncher : MonoBehaviour
         //Spawn lightning in front of the player
         TransformData transformData = SpawnTransformCamera(4);
 
-        GameObject lightning = Instantiate(lightningPrefab, transformData.position, lightningPrefab.transform.rotation);
+        GameObject lightning = Instantiate(lightningPrefab, SpawnTransformCamera(1).position, lightningPrefab.transform.rotation);
+    }
+
+    public void Tornado()
+    {
+        //Spawn tornado in front of the player
+        TransformData transformData = SpawnTransformCamera(1);
+
+        GameObject tornado = Instantiate(tornadoPrefab, transformData.position, SpawnTransformCamera(0).rotation);
+    }
+
+    public void WindUp()
+    {
+        //Spawn windUp in front of the player
+        TransformData transformData = SpawnTransformCamera(1);
+
+        GameObject windUp = Instantiate(windUpPrefab, transformData.position, windUpPrefab.transform.rotation);
     }
 
     public void PlanetBursto()

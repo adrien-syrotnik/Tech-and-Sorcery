@@ -3348,10 +3348,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 5
-  minDistanceFromThePlayer: 3
-  speed: 2
+  damage: 1
+  minDistanceFromThePlayer: 1
+  speed: 1
   rotationSpeed: 2
-  attackSpeed: 1
+  attackSpeed: 2
+  isDead: 0
 --- !u!1 &7686014124192866734
 GameObject:
   m_ObjectHideFlags: 0

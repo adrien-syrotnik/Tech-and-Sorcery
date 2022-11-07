@@ -55,7 +55,7 @@ public class Pistol : XRGrabInteractable
         {
             //Set time with the activate value
             playableDirector.time = controller.activateInteractionState.value;
-            Debug.Log(playableDirector.time);
+            //Debug.Log(playableDirector.time);
             if (controller.activateInteractionState.value > treshholdShoot && canShoot)
             {
                 Shoot();

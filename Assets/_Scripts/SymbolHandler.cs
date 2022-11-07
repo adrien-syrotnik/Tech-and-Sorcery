@@ -38,7 +38,7 @@ public class SymbolHandler : MonoBehaviour
 
     public void StartDraw()
     {
-        Debug.Log("Start Draw");
+        //Debug.Log("Start Draw");
         playerPath = new SymbolPath("PlayerPath");
         trail.enabled = true;
     }
@@ -81,7 +81,7 @@ public class SymbolHandler : MonoBehaviour
             try
             {
                 Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
-                Debug.Log(result.GestureClass + " " + result.Score);
+                //Debug.Log(result.GestureClass + " " + result.Score);
                 if (result.Score > minimumPourcentage)
                 {
                     OnSymbol.Invoke(result.GestureClass);
