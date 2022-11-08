@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lightning : GiveDamage
+public class Lightning : MonoBehaviour
 {
     public float duration = 0.5f;
     public float impactTime = 0.1f;
@@ -10,12 +10,19 @@ public class Lightning : GiveDamage
     public float explosionForce = 1000f;
     public float explosionRadius = 15f;
 
+    public float damage = 10;
+
+    public Vector2 pitchAudio = new Vector2(0.8f, 1.2f);
+
 
     // Start is called before the first frame update
     void Start()
     {
-        damage = 5;
         StartCoroutine(ExplosionImpact());
+
+        AudioSource audioSource = GetComponent<AudioSource>();
+        audioSource.pitch = Random.Range(pitchAudio.x, pitchAudio.y);
+        audioSource.Play();
     }
 
     private IEnumerator ExplosionImpact()
@@ -27,10 +34,10 @@ public class Lightning : GiveDamage
         
         foreach (Collider collider in colliders)
         {
-            ActivateParentRagdoll activate = collider.GetComponent<ActivateParentRagdoll>();
-            if (activate != null)
+            ICanTakeDamage canTakeDamageObject = collider.GetComponent<ICanTakeDamage>();
+            if (canTakeDamageObject != null)
             {
-                activate.GiveDamage(damage);
+                canTakeDamageObject.TakeDamage(damage);
             }
 
             Rigidbody rb = collider.GetComponent<Rigidbody>();
@@ -38,10 +45,8 @@ public class Lightning : GiveDamage
             {
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, 2f, ForceMode.Impulse);
             }
-
-            Debug.Log(collider.name);
         }
 
-        Destroy(gameObject,duration + 1f);
+        Destroy(gameObject,duration + 2f);
     }
 }

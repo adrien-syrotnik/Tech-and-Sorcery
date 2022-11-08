@@ -102,9 +102,9 @@ public class SpellLauncher : MonoBehaviour
     public void Lightning()
     {
         //Spawn lightning in front of the player
-        TransformData transformData = SpawnTransformCamera(4);
+        TransformData transformData = SpawnTransformCamera(3);
 
-        GameObject lightning = Instantiate(lightningPrefab, SpawnTransformCamera(1).position, lightningPrefab.transform.rotation);
+        GameObject lightning = Instantiate(lightningPrefab, transformData.position, lightningPrefab.transform.rotation);
     }
 
     public void Tornado()

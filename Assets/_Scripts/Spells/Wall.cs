@@ -37,6 +37,7 @@ public class Wall : MonoBehaviour
         if (isSummoned)
         {
             rockEffect.Stop();
+            GetComponent<AudioSource>().Stop();
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 [System.Serializable]
 public struct WeaponTemplate
@@ -21,6 +22,8 @@ public class SpawnWeapon : MonoBehaviour
     public GameObject viewportUI;
     public GameObject templateUI;
 
+    public TextMeshProUGUI nameText;
+
     private void Start()
     {
         //Get the viewport and create the weapon's UI
@@ -37,6 +40,9 @@ public class SpawnWeapon : MonoBehaviour
             entry.callback.AddListener((data) => { ChangeWeapon(weapon.name); });
             eventT.triggers.Add(entry);
         }
+
+        //Set the first weapon
+        ChangeWeapon(weapons[0].name);
 
     }
 
@@ -55,6 +61,7 @@ public class SpawnWeapon : MonoBehaviour
             if (weapons[i].name == name)
             {
                 index = i;
+                nameText.text = weapons[i].name;
                 break;
             }
         }

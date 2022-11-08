@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class RocketLauncherGrab : XRGrabInteractable
 {
 
-    private bool canShoot = false;
+    //private bool canShoot = false;
 
     protected override void Awake()
     {
@@ -18,7 +18,7 @@ public class RocketLauncherGrab : XRGrabInteractable
 
     public override void ProcessInteractable(XRInteractionUpdateOrder.UpdatePhase updatePhase)
     {
-        canShoot = false;
+        //canShoot = false;
         if (interactorsSelecting.Count == 1)
         {
             base.ProcessInteractable(updatePhase);
@@ -30,7 +30,7 @@ public class RocketLauncherGrab : XRGrabInteractable
 
         if (interactorsSelecting.Count == 2)
         {
-            canShoot = true;
+            //canShoot = true;
         }
 
     }

@@ -47,6 +47,9 @@ public class Lighsaber : MonoBehaviour
     private Vector3 _triggerEnterBasePosition;
     private Vector3 _triggerExitTipPosition;
 
+    public Vector2 pitchAudio = new Vector2(0.8f, 1.2f);
+    private AudioSource audioSource;
+
     void Start()
     {
         //Init mesh and triangles
@@ -68,6 +71,8 @@ public class Lighsaber : MonoBehaviour
         //Set starting position for tip and base
         _previousTipPosition = _tip.transform.position;
         _previousBasePosition = _base.transform.position;
+
+        audioSource = GetComponent<AudioSource>();
     }
     
     void LateUpdate()
@@ -121,6 +126,9 @@ public class Lighsaber : MonoBehaviour
     {
         _triggerEnterTipPosition = _tip.transform.position;
         _triggerEnterBasePosition = _base.transform.position;
+
+        audioSource.pitch = Random.Range(pitchAudio.x, pitchAudio.y);
+        audioSource.Play();
     }
 
     private void OnTriggerExit(Collider other)
@@ -156,6 +164,9 @@ public class Lighsaber : MonoBehaviour
         }
 
         GameObject[] slices = Slicer.Slice(plane, other.gameObject);
+        if (slices == null)
+            return;
+        
         Destroy(other.gameObject);
 
         Rigidbody rigidbody = slices[1].GetComponent<Rigidbody>();

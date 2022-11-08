@@ -613,11 +613,11 @@ MonoBehaviour:
   m_AngularVelocityScale: 1
   m_TrackPosition: 1
   m_SmoothPosition: 1
-  m_SmoothPositionAmount: 5
+  m_SmoothPositionAmount: 10.6
   m_TightenPosition: 0.5
   m_TrackRotation: 1
   m_SmoothRotation: 1
-  m_SmoothRotationAmount: 5
+  m_SmoothRotationAmount: 11.3
   m_TightenRotation: 0.5
   m_ThrowOnDetach: 1
   m_ThrowSmoothingDuration: 0.25

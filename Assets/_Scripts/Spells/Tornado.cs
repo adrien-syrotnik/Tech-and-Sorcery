@@ -34,11 +34,11 @@ public class Tornado : MonoBehaviour
             if (rb != null)
             {
                 rb.AddExplosionForce(force, transform.position, radius, upForce, ForceMode.Impulse);
-                ActivateParentRagdoll activateParentRagdoll = rb.GetComponent<ActivateParentRagdoll>();
-                if (activateParentRagdoll != null)
-                {
-                    activateParentRagdoll.GiveDamage(damage);
-                }
+            }
+            ICanTakeDamage canTakeDamageObject = nearbyObject.GetComponent<ICanTakeDamage>();
+            if (canTakeDamageObject != null)
+            {
+                canTakeDamageObject.TakeDamage(damage);
             }
         }
 

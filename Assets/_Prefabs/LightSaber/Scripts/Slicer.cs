@@ -14,7 +14,12 @@ namespace Assets.Scripts
         /// <param name="objectToCut"></param>
         /// <returns></returns>
         public static GameObject[] Slice(Plane plane, GameObject objectToCut)
-        {            
+        {   
+            if(objectToCut.GetComponent<MeshFilter>() == null)
+            {
+                return null;
+            }
+
             //Get the current mesh and its verts and tris
             Mesh mesh = objectToCut.GetComponent<MeshFilter>().mesh;
             var a = mesh.GetSubMesh(0);
@@ -22,7 +27,8 @@ namespace Assets.Scripts
 
             if(sliceable == null)
             {
-                throw new NotSupportedException("Cannot slice non sliceable object, add the sliceable script to the object or inherit from sliceable to support slicing");
+                return null;
+                //throw new NotSupportedException("Cannot slice non sliceable object, add the sliceable script to the object or inherit from sliceable to support slicing");
             }
             
             //Create left and right slice of hollow object

@@ -21,6 +21,9 @@ public class Pistol : XRGrabInteractable
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
 
+    public Vector2 pitchAudio = new Vector2(0.8f, 1.2f);
+    private AudioSource audioSource;
+
     protected override void OnSelectEntered(SelectEnterEventArgs args)
     {
         base.OnSelectEntered(args);
@@ -45,7 +48,7 @@ public class Pistol : XRGrabInteractable
     void Start()
     {
         playableDirector = GetComponent<PlayableDirector>();
-
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -77,6 +80,9 @@ public class Pistol : XRGrabInteractable
         bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * shootForce);
         //Destroy the bullet after 2 seconds
         Destroy(bullet, 2.0f);
+
+        audioSource.pitch = Random.Range(pitchAudio.x, pitchAudio.y);
+        audioSource.Play();
 
     }
 

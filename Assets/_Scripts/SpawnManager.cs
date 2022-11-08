@@ -13,6 +13,7 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnRobot(float hp, float damage, float speed)
     {
+        Debug.Log("SpawnRobot " + hp + " " + damage + " " + speed);
         int spawnIndex = Random.Range(0, spawnPoints.Length);
 
         Vector3 spawnPos = spawnPoints[spawnIndex].position;
@@ -51,6 +52,7 @@ public class SpawnManager : MonoBehaviour
                 if (!robot.isDead)
                     aliveRobots2++;
             }
+            Debug.Log("Alive robots: " + aliveRobots2);
         }
     }
 
@@ -69,7 +71,7 @@ public class SpawnManager : MonoBehaviour
                     aliveRobots++;
             }
             //Wait until there are 3 alive robots
-            while (aliveRobots < simultaneousNumber)
+            while (aliveRobots > simultaneousNumber)
             {
                 yield return new WaitForSeconds(0.5f);
                 robots = FindObjectsOfType<Robots>();
@@ -110,7 +112,7 @@ public class SpawnManager : MonoBehaviour
     public IEnumerator StartAdvancedLevel()
     {
         //A lot of robots
-        yield return StartCoroutine(SpawnWave(50, 25, 3, 1, 2));
+        yield return StartCoroutine(SpawnWave(50, 30, 3, 1, 5));
 
         //Strong one
         yield return StartCoroutine(SpawnWave(10, 5, 30, 3, 0.75f));
@@ -123,7 +125,7 @@ public class SpawnManager : MonoBehaviour
     public IEnumerator StartImpossibleLevel()
     {
         //A lot of robots
-        yield return StartCoroutine(SpawnWave(100, 50, 5, 1, 2));
+        yield return StartCoroutine(SpawnWave(100, 50, 5, 1, 5));
 
         //Strong one
         yield return StartCoroutine(SpawnWave(25, 10, 50, 5, 1.2f));

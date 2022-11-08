@@ -29,14 +29,18 @@ public class ProjectileController : MonoBehaviour
     public float force = 700f;
     public float damage = 5f;
 
+    private void Start()
+    {
+        //Add force tp launch the projectile
+        GetComponent<Rigidbody>().AddForce(transform.forward * speed, ForceMode.Impulse);
+    }
 
     private void Update()
     {
         // --- Check to see if the target has been hit. We don't want to update the position if the target was hit ---
         if (targetHit) return;
 
-        // --- moves the game object in the forward direction at the defined speed ---
-        transform.position += transform.forward * (speed * Time.deltaTime);
+        
     }
 
 
@@ -86,11 +90,11 @@ public class ProjectileController : MonoBehaviour
             if (rb != null)
             {
                 rb.AddExplosionForce(force, transform.position, radius, force / 2);
-                ActivateParentRagdoll activateParentRagdoll = rb.GetComponent<ActivateParentRagdoll>();
-                if (activateParentRagdoll != null)
-                {
-                    activateParentRagdoll.GiveDamage(damage);
-                }
+            }
+            ICanTakeDamage canTakeDamageObject = nearbyObject.GetComponent<ICanTakeDamage>();
+            if (canTakeDamageObject != null)
+            {
+                canTakeDamageObject.TakeDamage(damage);
             }
 
 

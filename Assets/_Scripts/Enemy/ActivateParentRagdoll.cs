@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActivateParentRagdoll : MonoBehaviour
+public class ActivateParentRagdoll : MonoBehaviour, ICanTakeDamage
 {
 
     private Rigidbody rb;
@@ -12,22 +12,21 @@ public class ActivateParentRagdoll : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void GiveDamage(float damage)
+    public void TakeDamage(float damage)
     {
-        if(rb.isKinematic)
+        if (rb.isKinematic)
         {
             Robots robots = GetComponentInParent<Robots>();
             robots.TakeDamage(damage);
         }
-        
     }
-    
+
     public void OnCollisionEnter(Collision collision)
     {
         GiveDamage giveDamage = collision.gameObject.GetComponent<GiveDamage>();
         if (giveDamage != null)
         {
-            GiveDamage(giveDamage.damage);
+            TakeDamage(giveDamage.damage);
         }
     }
     
@@ -36,7 +35,7 @@ public class ActivateParentRagdoll : MonoBehaviour
         GiveDamage giveDamage = other.gameObject.GetComponent<GiveDamage>();
         if (giveDamage != null)
         {
-            GiveDamage(giveDamage.damage);
+            TakeDamage(giveDamage.damage);
         }
     }
 }

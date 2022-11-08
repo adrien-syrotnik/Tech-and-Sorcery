@@ -5,5 +5,5 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class GiveDamage : MonoBehaviour
 {
-    public int damage;
+    public float damage;
 }

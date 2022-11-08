@@ -41,6 +41,7 @@ public class Empalement : MonoBehaviour
         if(isSummoned)
         {
             rockEffect.Stop();
+            GetComponent<AudioSource>().Stop();
         }
     }
 

@@ -27,11 +27,11 @@ public class WindUp : MonoBehaviour
             if (rb != null)
             {
                 rb.AddForce(Vector3.up * upForce, ForceMode.Impulse);
-                ActivateParentRagdoll activateParentRagdoll = rb.GetComponent<ActivateParentRagdoll>();
-                if (activateParentRagdoll != null)
-                {
-                    activateParentRagdoll.GiveDamage(damage);
-                }
+            }
+            ICanTakeDamage canTakeDamageObject = nearbyObject.GetComponent<ICanTakeDamage>();
+            if (canTakeDamageObject != null)
+            {
+                canTakeDamageObject.TakeDamage(damage);
             }
         }
 
